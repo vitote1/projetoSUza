@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dacy Artes</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <header id="topo">
+        <img src="fotos/logo2.png" alt="logo" class="logo">
+
+    </header>
+  
+    <div id="mudarProduto">
+        <div id="titulo">
+        <h1 class="tituloProduto">Modificar produto</h1>
+       </div>
+
+        <div id="insNom2">
+            <p>Nome: <input type="text" id="nomeNew2"></p>
+        </div>
+
+        <div id="insDes2">
+        <p>Descrição: <input type="text" id="descricaoNew2"></p>
+        </div>
+
+        <div id="insPrec2">
+        <p>Preço: <input type="number" id="precoNew2" placeholder="1.99"></p>
+       </div>
+
+       <div id="insUni2">
+        <p>Unidades: <input type="number" id="unityNew2"></p>
+       </div>
+
+       <div id="selTip2">
+        <p>Tipo de Produto: <select class='selectProd' id="typeProduto2" name="selecionarTipo1" onchange="selecionarProduto2()">
+                <option value="not" selected disabled hidden>Selecione uma opção</option>
+                <option value="Aplique">Apliques</option>
+                <option value="Laco">Laço</option>
+                <option value="Necessaire">Nécessaire</option>
+            </select></p><br>
+        </div>
+        <br>
+        <div id="botoesADD">
+        <button class='criarProd' id="save-button2">Salvar</button>
+        <button class='criarProd' id="cancelar-button2">Cancelar</button>
+        </div>
+
+</div>
+<script src="scriptclasses.js"></script>
+<script src="script2.js"></script> 
+<script src="editarProduto.js"></script>
+<script src="addImg.js"></script>
+    </body>
+    </html>
+  
