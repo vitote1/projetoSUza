@@ -71,13 +71,80 @@ function selecionarProduto() {
 }
 
 
+function selecionarProduto2() {
+    const tipoProduto2 = document.getElementById('typeProduto2').value;
+    ['possuiChav', 'possuiTiara', 'possuiBolsa'].forEach(id => {
+        const elem = document.getElementById(id);
+        if (elem) elem.remove();
+    });
+    if (tipoProduto2 === 'Aplique') {
+        aparecerOpcao2('possuiChav', 'Possui chaveiro?', 'selectAplique', [{ text: 'Sim', value: 'sim' }, { text: 'Não', value: 'nao' }]);
+    } else if (tipoProduto2 === 'Laco') {
+        aparecerOpcao2('possuiTiara', 'Possui tiara?', 'selectLaco', [{ text: 'Sim', value: 'sim' }, { text: 'Não', value: 'nao' }]);
+    } else if (tipoProduto2 === 'Necessaire') {
+        aparecerOpcao2('possuiBolsa', 'Qual tipo de bolsa?', 'selectNecessaire', [{ text: 'Bolsa Simples', value: 'Bolsa Simples' }, { text: 'Bolsa box', value: 'Bolsa box' }]);
+    }
+}
+function aparecerOpcao2(divId2, textoParagrafo2, selectId2, options2) {
+    const divPai2 = document.getElementById('selTip2');
+    const novoDiv2 = document.createElement('div');
+    novoDiv2.id = divId2;
 
+    const textDiv2 = document.createElement('div');
+    textDiv2.className = 'textoNovaDiv';
+    textDiv2.textContent = textoParagrafo2;
 
+    const novoSelect2 = document.createElement('select');
+    novoSelect2.className = 'selectCreat';
+    novoSelect2.id = selectId2;
+    novoSelect2.setAttribute('name', selectId2);
+
+    const option02 = document.createElement('option');
+    option02.value = 'nada';
+    option02.textContent = 'Selecione uma opção';
+    option02.setAttribute('selected', true);
+    option02.setAttribute('disabled', true);
+    option02.setAttribute('hidden', true);
+    novoSelect2.appendChild(option02);
+
+    options2.forEach(option => {
+        const novoOption2 = document.createElement('option');
+        novoOption2.textContent = option.text;
+        novoOption2.value = option.value;
+        novoSelect2.appendChild(novoOption2);
+    });
+
+    novoDiv2.appendChild(textDiv2);
+    novoDiv2.appendChild(novoSelect2);
+    divPai2.appendChild(novoDiv2);
+}
+
+let imgsrc = '';
+const imgInput = document.getElementById('image-input')
+
+imgInput.addEventListener('change', function(e) {
+    const inputTarget = e.target;
+    const file = inputTarget.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+
+        reader.addEventListener('load', function(e) {
+            const readerTarget = e.target;
+            imgsrc = readerTarget.result;
+            
+        });
+
+        reader.readAsDataURL(file);
+        
+    }
+});
     function adicionarNovoProduto() {
+        console.log(imgsrc)
         const nomeProd = document.getElementById('nomeNew').value;
         const descProd = document.getElementById('descricaoNew').value;
         const tipProd = document.getElementById('typeProduto').value;
-        const precProd = Number(document.getElementById('precoNew').value);
+        const precProd = parseFloat(document.getElementById('precoNew').value);
         const unidadeProd = Number(document.getElementById('unityNew').value);
     
         let selectValue;
@@ -91,23 +158,24 @@ function selecionarProduto() {
     
         if (nomeProd && descProd && tipProd !== 'not' && precProd > 0 && unidadeProd > 0 && selectValue !== 'nada' && imgsrc !== '') {
             let novoProduto;
-            novoProduto.imgsrc = imgsrc;
+    
             if (tipProd === 'Aplique') {
                 novoProduto = new Aplique(nomeProd, precProd, descProd, unidadeProd, selectValue);
+                 novoProduto.imgsrc = imgsrc;
                 addImg(divApliques, nomeProd, precProd, tipProd.toLowerCase() + 's', descProd, unidadeProd, selectValue, novoProduto.imgsrc);
             } else if (tipProd === 'Laco') {
+                novoProduto.imgsrc = imgsrc;
                 novoProduto = new Laco(nomeProd, precProd, descProd, unidadeProd, selectValue);
                 addImg(divLacos, nomeProd, precProd, tipProd.toLowerCase() + 's', descProd, unidadeProd, selectValue, novoProduto.imgsrc);
             } else if (tipProd === 'Necessaire') {
+                novoProduto.imgsrc = imgsrc;
                 novoProduto = new Necessaire(nomeProd, precProd, descProd, unidadeProd, selectValue);
                 addImg(divNecessaire, nomeProd, precProd, tipProd.toLowerCase() + 's', descProd, unidadeProd, selectValue, novoProduto.imgsrc);
             }
     
-        
-            
     
             salvarProduto(tipProd.toLowerCase() + 's', novoProduto);
-          
+            
     
             document.getElementById('nomeNew').value = '';
             document.getElementById('descricaoNew').value = '';
@@ -135,41 +203,83 @@ function salvarProduto(chave, produto) {
 
 
 
-let imgsrc = '';
-const imgInput = document.getElementById('image-input');
 
-imgInput.addEventListener('change', function(e) {
-    const inputTarget = e.target;
-    const file = inputTarget.files[0];
+
+
+const divApliques = document.getElementById('apliquesDiv')
+const divLacos = document.getElementById('lacosDiv')
+const divNecessaire = document.getElementById('necessaireDiv')
+
+function addImg (divPai, nomeProduto, preco, idParteUm, descricao, unidades, selectVa, scr){
+    const divText = document.createElement('div');
+    divText.className = 'descricaoProduto';
+    divText.textContent = nomeProduto;
     
-    if (file) {
-        const reader = new FileReader();
-
-        reader.addEventListener('load', function(e) {
-            const readerTarget = e.target;
-            imgsrc = readerTarget.result;
-            localStorage.setItem('minhaImagem', imgsrc);
-        });
-
-        reader.readAsDataURL(file);
-        
+    if (typeof preco !== 'number') {
+        preco = parseFloat(preco); 
     }
-});
+    const divPreco = document.createElement('div');
+    divPreco.className = 'precoProduto';
+    divPreco.textContent = `RS ${preco.toFixed(2).replace('.', ',')}`;
 
+    const divProduto = document.createElement('div');
+    divProduto.className = 'produto';
+    let idUnico = idParteUm +  Date.now();
+    divProduto.id = idUnico;
+    
+    const divImg =  document.createElement('div');
 
+    const imgTest = document.createElement('img');
+    imgTest.className = 'imgProduto';
+    let imgId = Date.now();
+    divImg.id = imgId;
+    imgTest.setAttribute('height', 270);
+    imgTest.setAttribute('width', 180);
 
+    const botaoExcluir = document.createElement('button');
+    botaoExcluir.className = 'adicionarProduto';
+    botaoExcluir.id = 'botEx';
+    
+    const creatIcon = document.createElement('i');
+    creatIcon.classList.add('material-icons');
+    creatIcon.textContent = 'delete_forever';
+    creatIcon.id = 'excluirIcon';
 
+    const botaoEdit = document.createElement('button');
+    botaoEdit.className = 'editarProduto';
+    botaoEdit.id = 'botEdit';
 
+    const editIcon = document.createElement('i');
+    editIcon.classList.add('material-icons');
+    editIcon.textContent = 'mode_edit';
+    editIcon.id = 'editIcon';
+    
+    divPai.appendChild(divProduto);
+    imgTest.src = scr;
+    divProduto.appendChild(divImg);
+    divImg.appendChild(imgTest);
+    divProduto.appendChild(divText);
+    divProduto.appendChild(divPreco);
+    divPreco.appendChild(botaoExcluir);
+    divPreco.appendChild(botaoEdit);
+    botaoExcluir.appendChild(creatIcon);
+    botaoEdit.appendChild(editIcon);
+    
 
-    function editarInfos(nome, descr, prec, unity, type, id){
+    botaoExcluir.addEventListener('click', excluirProdutoADD(idUnico, idParteUm, nomeProduto));
+    botaoEdit.addEventListener('click', editarInfos(nomeProduto, descricao, preco, unidades, selectVa, scr, imgId, divPai));
+
+}
+    function editarInfos(nome, descr, prec, unity, type, scr, imgId, divPai){
         return function(){
         localStorage.setItem('nome', nome);
         localStorage.setItem('descricao', descr);
         localStorage.setItem('preco', prec);
         localStorage.setItem('unidade', unity);
         localStorage.setItem('type', type);
-        localStorage.setItem('url', imgsrc);
-        localStorage.setItem('id', id)
+        localStorage.setItem('url', scr);
+        localStorage.setItem('ids', imgId);
+        localStorage.setItem('divPai', divPai);
         window.location.href = 'mudarProd.html';
     }}
     
@@ -206,19 +316,45 @@ function fecharListaAddProd(){
     }
 }
 
-    function carregarProdutos() {
-        let apliques = JSON.parse(localStorage.getItem('apliques')) || [];
-        let lacos = JSON.parse(localStorage.getItem('lacos')) || [];
-        let necessaires = JSON.parse(localStorage.getItem('necessaires')) || [];
-    
-        apliques.forEach(aplique => {
-            addImg(divApliques, aplique.nome, aplique.preco, 'apliques', aplique.descricao, aplique.kit, aplique.chaveiro, aplique.imgsrc);
-        });
-        lacos.forEach(lacos => {
-            addImg(divLacos, lacos.nome, lacos.preco, 'lacos', lacos.descricao, lacos.kit, lacos.tiara, lacos.imgsrc);
-        });
-        necessaires.forEach(necessaires => {
-            addImg(divNecessaire, necessaires.nome, necessaires.preco, 'necessaires', necessaires.descricao, necessaires.kit, necessaires.tipoBolsa, necessaires.imgsrc);
-        });
+function carregarProdutos() {
+    let apliques = JSON.parse(localStorage.getItem('apliques')) || [];
+    let lacos = JSON.parse(localStorage.getItem('lacos')) || [];
+    let necessaires = JSON.parse(localStorage.getItem('necessaires')) || [];
+    let url = localStorage.getItem('url');
+    let idImg = localStorage.getItem('ids');
+    let divPaiId = localStorage.getItem('divPai');
+
+    apliques.forEach(aplique => {
+        addImg(divApliques, aplique.nome, aplique.preco, 'apliques', aplique.descricao, aplique.kit, aplique.chaveiro, aplique.imgsrc);
+    });
+    lacos.forEach(laco => {
+        addImg(divLacos, laco.nome, laco.preco, 'lacos', laco.descricao, laco.kit, laco.tiara, laco.imgsrc);
+    });
+    necessaires.forEach(necessaire => {
+        addImg(divNecessaire, necessaire.nome, necessaire.preco, 'necessaires', necessaire.descricao, necessaire.kit, necessaire.tipoBolsa, necessaire.imgsrc);
+    });
+
+    console.log('Carregando produtos...');
+    console.log('URL da imagem:', url);
+    console.log('ID da imagem:', idImg);
+    console.log('Apliques:', apliques);
+
+    if (url && idImg && divPaiId) {
+        let divPai = document.getElementById(divPaiId);
+        if (divPai) {
+            let imagem = document.createElement('img');
+            imagem.src = url;
+            imagem.setAttribute('height', 270);
+            imagem.setAttribute('width', 180);
+            imagem.alt = 'Imagem do produto'; 
+            divPai.appendChild(imagem);
+            console.log('Imagem adicionada ao elemento pai.');
+        } else {
+            console.error(`Elemento pai com ID ${divPaiId} não encontrado.`);
+        }
+    } else {
+        console.error('URL, ID da imagem ou ID do elemento pai ausentes.');
     }
+}
+
 window.addEventListener('load', carregarProdutos);
