@@ -164,12 +164,14 @@ imgInput.addEventListener('change', function(e) {
                  novoProduto.imgsrc = imgsrc;
                 addImg(divApliques, nomeProd, precProd, tipProd.toLowerCase() + 's', descProd, unidadeProd, selectValue, novoProduto.imgsrc);
             } else if (tipProd === 'Laco') {
-                novoProduto.imgsrc = imgsrc;
+            
                 novoProduto = new Laco(nomeProd, precProd, descProd, unidadeProd, selectValue);
+                novoProduto.imgsrc = imgsrc;
                 addImg(divLacos, nomeProd, precProd, tipProd.toLowerCase() + 's', descProd, unidadeProd, selectValue, novoProduto.imgsrc);
             } else if (tipProd === 'Necessaire') {
-                novoProduto.imgsrc = imgsrc;
+                
                 novoProduto = new Necessaire(nomeProd, precProd, descProd, unidadeProd, selectValue);
+                novoProduto.imgsrc = imgsrc;
                 addImg(divNecessaire, nomeProd, precProd, tipProd.toLowerCase() + 's', descProd, unidadeProd, selectValue, novoProduto.imgsrc);
             }
     
